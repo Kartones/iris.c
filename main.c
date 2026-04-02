@@ -703,7 +703,7 @@ int main(int argc, char *argv[]) {
     if (output_level >= OUTPUT_NORMAL) fflush(stderr);
     timer_begin();
 
-    if (iris_image_save_with_seed(output, output_path, actual_seed) != 0) {
+    if (iris_image_save_with_metadata(output, output_path, actual_seed, prompt, model_dir) != 0) {
         fprintf(stderr, "\nError: Failed to save image: %s\n", output_path);
         iris_image_free(output);
         iris_free(ctx);

@@ -3,6 +3,7 @@
 
 # Compiled binaries
 flux
+iris
 
 # Model weights (large files)
 flux-klein-*/
@@ -27,3 +28,4 @@ documents/
 *.a
 *.so
 *.dylib
+iris_shaders_source.h

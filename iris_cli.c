@@ -472,7 +472,7 @@ static int generate_image(const char *prompt, const char *ref_image,
     /* Save to temp */
     char path[CLI_MAX_PATH];
     get_image_path(path, sizeof(path));
-    iris_image_save_with_seed(img, path, actual_seed);
+    iris_image_save_with_metadata(img, path, actual_seed, prompt, state.model_dir);
     iris_image_free(img);
 
     /* Update last image and register as reference */
@@ -566,7 +566,7 @@ static int generate_multiref(const char *prompt, const char **ref_paths, int num
     /* Save to temp */
     char path[CLI_MAX_PATH];
     get_image_path(path, sizeof(path));
-    iris_image_save_with_seed(img, path, actual_seed);
+    iris_image_save_with_metadata(img, path, actual_seed, prompt, state.model_dir);
     iris_image_free(img);
 
     /* Update last image and register as reference */

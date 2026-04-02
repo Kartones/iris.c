@@ -270,7 +270,8 @@ static void write_png_text_chunk(FILE *f, const char *keyword, const char *text)
     free(data);
 }
 
-static int save_png_with_metadata(const iris_image *img, FILE *f, int64_t seed, int has_seed) {
+static int save_png_with_metadata(const iris_image *img, FILE *f, int64_t seed, int has_seed,
+                                   const char *prompt, const char *model_dir) {
     /* PNG signature */
     const uint8_t signature[8] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
     fwrite(signature, 1, 8, f);
@@ -299,8 +300,10 @@ static int save_png_with_metadata(const iris_image *img, FILE *f, int64_t seed, 
         char seed_str[32];
         snprintf(seed_str, sizeof(seed_str), "%lld", (long long)seed);
         write_png_text_chunk(f, "iris:seed", seed_str);
-        write_png_text_chunk(f, "Software", "iris (https://github.com/antirez/iris)");
+        write_png_text_chunk(f, "Software", "iris (https://github.com/Kartones/iris.c - fork of https://github.com/antirez/iris.c)");
         write_png_text_chunk(f, "iris:model", "iris");
+        if (prompt) write_png_text_chunk(f, "iris:prompt", prompt);
+        if (model_dir) write_png_text_chunk(f, "iris:model_dir", model_dir);
     }
 
     /* Prepare raw image data with filter bytes */
@@ -347,7 +350,7 @@ static int save_png_with_metadata(const iris_image *img, FILE *f, int64_t seed, 
 }
 
 static int save_png(const iris_image *img, FILE *f) {
-    return save_png_with_metadata(img, f, 0, 0);
+    return save_png_with_metadata(img, f, 0, 0, NULL, NULL);
 }
 
 /* Read 4-byte big-endian integer */
@@ -921,7 +924,8 @@ int iris_image_save(const iris_image *img, const char *path) {
     return result;
 }
 
-int iris_image_save_with_seed(const iris_image *img, const char *path, int64_t seed) {
+int iris_image_save_with_metadata(const iris_image *img, const char *path, int64_t seed,
+                                   const char *prompt, const char *model_dir) {
     if (!img || !path) return -1;
 
     FILE *f = fopen(path, "wb");
@@ -931,13 +935,13 @@ int iris_image_save_with_seed(const iris_image *img, const char *path, int64_t s
     const char *ext = get_extension(path);
 
     if (strcasecmp(ext, "png") == 0) {
-        result = save_png_with_metadata(img, f, seed, 1);
+        result = save_png_with_metadata(img, f, seed, 1, prompt, model_dir);
     } else if (strcasecmp(ext, "ppm") == 0 || strcasecmp(ext, "pgm") == 0) {
         /* PPM doesn't support metadata, just save normally */
         result = save_ppm(img, f);
     } else {
         /* Default to PNG with seed */
-        result = save_png_with_metadata(img, f, seed, 1);
+        result = save_png_with_metadata(img, f, seed, 1, prompt, model_dir);
     }
 
     fclose(f);

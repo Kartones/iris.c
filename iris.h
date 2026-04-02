@@ -214,11 +214,13 @@ iris_image *iris_image_load(const char *path);
 int iris_image_save(const iris_image *img, const char *path);
 
 /*
- * Save image to PNG with seed embedded as metadata.
- * The seed is stored in a tEXt chunk with keyword "iris:seed".
+ * Save image to PNG with generation metadata embedded as tEXt chunks:
+ *   iris:seed, iris:prompt, iris:model_dir, Software, iris:model.
+ * prompt and model_dir may be NULL.
  * Returns 0 on success, -1 on error.
  */
-int iris_image_save_with_seed(const iris_image *img, const char *path, int64_t seed);
+int iris_image_save_with_metadata(const iris_image *img, const char *path, int64_t seed,
+                                   const char *prompt, const char *model_dir);
 
 /*
  * Create a new image with given dimensions.

@@ -725,7 +725,7 @@ iris_image *iris_img2img(iris_ctx *ctx, const char *prompt, const iris_image *in
 ```c
 iris_image *iris_image_load(const char *path);     /* Load PNG, JPEG, or PPM */
 int iris_image_save(const iris_image *img, const char *path);  /* 0=success, -1=error */
-int iris_image_save_with_seed(const iris_image *img, const char *path, int64_t seed);  /* Save with metadata */
+int iris_image_save_with_metadata(const iris_image *img, const char *path, int64_t seed, const char *prompt, const char *model_dir);  /* Save with metadata */
 iris_image *iris_image_resize(const iris_image *img, int new_w, int new_h);
 void iris_image_free(iris_image *img);
 ```
