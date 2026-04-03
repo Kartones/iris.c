@@ -28,6 +28,3 @@ documents/
 *.so
 *.dylib
 iris_shaders_source.h
-
-# personal cheatsheet and typical commands
-QUICKSTART.md
