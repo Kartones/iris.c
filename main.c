@@ -459,7 +459,7 @@ int main(int argc, char *argv[]) {
         params.seed = actual_seed;
     }
     iris_set_seed(actual_seed);
-    LOG_NORMAL("Seed: %lld\n", (long long)actual_seed);
+    fprintf(stderr, "Seed: %lld\n", (long long)actual_seed);
 
     /* Verbose header */
     LOG_VERBOSE("Iris Image Generator\n");
